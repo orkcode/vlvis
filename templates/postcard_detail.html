@@ -2,6 +2,7 @@
 
 {% block title %}Postcard {{ postcard.uuid }}{% endblock %}
 
+{% block content %}
 <h1>Postcard {{ postcard.uuid }}</h1>
 {% if media_file %}
     {% if media_file.is_video %}
@@ -27,3 +28,4 @@
         <button type="submit" name="add_photo">Add Media</button>
     </form>
 {% endif %}
+{% endblock %}
