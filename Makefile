@@ -1,4 +1,4 @@
-.PHONY: setup_and_run load superuser
+.PHONY: setup_and_run load superuser run
 
 setup_and_run: load superuser run
 
