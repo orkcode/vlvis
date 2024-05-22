@@ -3,29 +3,43 @@
 {% block title %}Postcard {{ postcard.uuid }}{% endblock %}
 
 {% block content %}
-<h1>Postcard {{ postcard.uuid }}</h1>
-{% if media_file %}
-    {% if media_file.is_video %}
-        <video width="600" autoplay="autoplay" controls="controls" preload="preload">
-            <source src="{{ media_file.file.url }}" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
-    {% elif media_file.is_image %}
-        <img src="{{ media_file.file.url }}" alt="Postcard Image" width="600">
-    {% else %}
-        <p>Unsupported media type.</p>
-    {% endif %}
-    <form method="post" action="" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ delete_form.password.label_tag }} {{ delete_form.password }}
-        <button type="submit" name="delete_photo">Delete Media</button>
-    </form>
-{% else %}
-    <form method="post" action="" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ add_form.file.label_tag }} {{ add_form.file }}
-        {{ add_form.password.label_tag }} {{ add_form.password }}
-        <button type="submit" name="add_photo">Add Media</button>
-    </form>
-{% endif %}
+<div class="container mt-4">
+    <h1 class="text-center">Postcard {{ postcard.uuid }}</h1>
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10 col-sm-12">
+            {% if media_file %}
+                <div class="mb-3 text-center">
+                    {% if media_file.is_video %}
+                        <video class="img-fluid" autoplay="autoplay" controls="controls" preload="preload">
+                            <source src="{{ media_file.file.url }}" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    {% elif media_file.is_image %}
+                        <img src="{{ media_file.file.url }}" alt="Postcard Image" class="img-fluid">
+                    {% else %}
+                        <p>Unsupported media type.</p>
+                    {% endif %}
+                </div>
+                <form method="post" action="" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        {{ delete_form.password.label_tag }} {{ delete_form.password }}
+                    </div>
+                    <button type="submit" name="delete_photo" class="btn btn-danger btn-block">Delete Media</button>
+                </form>
+            {% else %}
+                <form method="post" action="" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        {{ add_form.file.label_tag }} {{ add_form.file }}
+                    </div>
+                    <div class="form-group">
+                        {{ add_form.password.label_tag }} {{ add_form.password }}
+                    </div>
+                    <button type="submit" name="add_photo" class="btn btn-primary btn-block">Add Media</button>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+</div>
 {% endblock %}
