@@ -11,7 +11,7 @@ services:
       - "8000:8000"
     volumes:
       - .:/app
-    command: make run
+    command: make setup_and_run
 
   nginx:
     image: nginx:1.23-alpine
