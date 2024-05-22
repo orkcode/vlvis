@@ -11,7 +11,7 @@ services:
       - "8000:8000"
     volumes:
       - .:/app
-    command: pipenv run python manage.py runserver 0.0.0.0:8000
+    command: make run
 
   nginx:
     image: nginx:1.23-alpine
