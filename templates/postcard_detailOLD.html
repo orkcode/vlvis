@@ -1,0 +1,16 @@
+<h1>Postcard {{ postcard.uuid }}</h1>
+    {% if media_file %}
+        <img src="{{ media_file.file.url }}" alt="Postcard Image">
+        <form method="post" action="" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ delete_form.password.label_tag }} {{ delete_form.password }}
+            <button type="submit" name="delete_photo">Delete Photo</button>
+        </form>
+    {% else %}
+        <form method="post" action="" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ add_form.file.label_tag }} {{ add_form.file }}
+            {{ add_form.password.label_tag }} {{ add_form.password }}
+            <button type="submit" name="add_photo">Add Photo</button>
+        </form>
+    {% endif %}

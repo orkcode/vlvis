@@ -1,0 +1,4 @@
+{% load custom_filters %}
+<h1>Your Random Password: {{ password }}</h1>
+<h2>QR Code:</h2>
+<img src="data:image/png;base64,{{ qr_image|base64 }}" alt="QR Code">
