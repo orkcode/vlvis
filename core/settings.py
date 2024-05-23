@@ -33,8 +33,8 @@ SECRET_KEY = env(
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    '185.119.56.191',
-    '2998793-yg45018.twc1.net',
+    '185.233.186.243',
+    '3004109-vg50432.twc1.net',
 ]
 
 
