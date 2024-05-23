@@ -9,79 +9,92 @@
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <style>
         body {
-            background: linear-gradient(135deg, #ffe6e9, #ffffff);
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-        header {
-            background-color: #ffc0cb;
-            color: white;
-            padding: 20px 0;
-            text-align: center;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-        footer {
-            background-color: #ffc0cb;
-            color: white;
-            text-align: center;
-            padding: 10px 0;
-            width: 100%;
-            box-shadow: 0 -4px 8px rgba(0,0,0,0.1);
-        }
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-        }
-        .btn-primary {
-            background-color: #ff69b4;
-            border: none;
-        }
-        .btn-primary:hover {
-            background-color: #ff1493;
-        }
-        .container {
-            flex-grow: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .card {
-            border: none;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-        .postcard-card {
-            background: linear-gradient(135deg, #fff0f5 0%, #ffebcd 100%);
-            border-radius: 15px;
-            width: 100%;
-            max-width: 600px;
-            margin-bottom: 20px;
-        }
-        .postcard-header {
-            background-color: #ff69b4;
-            color: white;
-            border-top-left-radius: 15px;
-            border-top-right-radius: 15px;
-            padding: 15px 0;
-        }
-        .postcard-body {
-            padding: 30px;
-        }
-        .media-container {
-            border: 5px solid #ff69b4;
-            padding: 10px;
-            border-radius: 15px;
-            background-color: #fff0f5;
-        }
-        .postcard-media {
-            border-radius: 15px;
-            max-height: 400px;
-            object-fit: cover;
-        }
+    background: linear-gradient(135deg, #ffe6e9, #ffffff);
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    background: linear-gradient(135deg, #ff69b4, #ff1493);
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+footer {
+    background: linear-gradient(135deg, #ff69b4, #ff1493);
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    width: 100%;
+    box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+}
+
+.btn-primary {
+    background-color: #ff69b4;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #ff1493;
+}
+
+.container {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.card {
+    border: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.postcard-card {
+    background: linear-gradient(135deg, #fff0f5, #ffebcd);
+    border-radius: 15px;
+    width: 100%;
+    max-width: 600px;
+    margin-bottom: 20px;
+}
+
+.postcard-header {
+    background-color: #ff69b4;
+    color: white;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    padding: 15px 0;
+}
+
+.postcard-body {
+    padding: 30px;
+}
+
+.media-container {
+    border: 5px solid #ff69b4;
+    padding: 10px;
+    border-radius: 15px;
+    background-color: #fff0f5;
+}
+
+.postcard-media {
+    border-radius: 15px;
+    max-height: 400px;
+    object-fit: cover;
+}
+
     </style>
 </head>
 <body>
