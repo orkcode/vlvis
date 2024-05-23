@@ -1,33 +1,43 @@
 {% extends 'base.html' %}
-{% load static %}
 
-{% block title %}Эксклюзивные QR-открытки для влюбленных{% endblock %}
+{% block title %}Postcard {{ postcard.uuid }}{% endblock %}
 
 {% block content %}
-<div class="container my-5">
-    <div class="row">
-        <div class="col-md-6">
-            <h1 class="display-4 text-primary mb-4">Создайте незабываемые моменты</h1>
-            <p class="lead">Наши эксклюзивные QR-открытки помогут вам выразить свои чувства самым романтичным и креативным способом. Просто наклейте QR-код на чехол телефона, и ваша вторая половинка сможет открыть специальное фото или видео, когда захочет.</p>
-            <a href="#" class="btn btn-primary btn-lg mt-3">Заказать сейчас</a>
-        </div>
-        <div class="col-md-6">
-            <div class="media-content rounded-4 overflow-hidden shadow-lg">
-                {% if media_file %}
-                    {% if media_file.is_video %}
-                        <video autoplay loop muted class="w-100">
-                            <source src="{{ media_file.file.url }}" type="video/mp4">
-                        </video>
-                    {% elif media_file.is_image %}
-                        <img src="{{ media_file.file.url }}" alt="Postcard Image" class="w-100">
-                    {% else %}
-                        <p class="text-center p-5">Unsupported media type.</p>
-                    {% endif %}
-                {% else %}
-                    <img src="{% static 'img/default.jpg' %}" alt="Default Image" class="w-100">
-                {% endif %}
-            </div>
-        </div>
+<div class="card text-center">
+    <div class="card-header">
+        <h2>Postcard {{ postcard.uuid }}</h2>
+    </div>
+    <div class="card-body">
+        {% if media_file %}
+            {% if media_file.is_video %}
+                <video class="img-fluid rounded" autoplay controls preload>
+                    <source src="{{ media_file.file.url }}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            {% elif media_file.is_image %}
+                <img src="{{ media_file.file.url }}" alt="Postcard Image" class="img-fluid rounded">
+            {% else %}
+                <p>Unsupported media type.</p>
+            {% endif %}
+            <form method="post" action="" enctype="multipart/form-data" class="mt-3">
+                {% csrf_token %}
+                <div class="form-group">
+                    {{ delete_form.password.label_tag }} {{ delete_form.password }}
+                </div>
+                <button type="submit" name="delete_photo" class="btn btn-primary mt-2">Delete Media</button>
+            </form>
+        {% else %}
+            <form method="post" action="" enctype="multipart/form-data" class="mt-3">
+                {% csrf_token %}
+                <div class="form-group">
+                    {{ add_form.file.label_tag }} {{ add_form.file }}
+                </div>
+                <div class="form-group mt-2">
+                    {{ add_form.password.label_tag }} {{ add_form.password }}
+                </div>
+                <button type="submit" name="add_photo" class="btn btn-primary mt-3">Add Media</button>
+            </form>
+        {% endif %}
     </div>
 </div>
 {% endblock %}
