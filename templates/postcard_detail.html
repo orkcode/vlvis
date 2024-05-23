@@ -14,12 +14,12 @@
                     {% if media_file.is_video %}
                         <video class="img-fluid rounded postcard-media" autoplay controls preload>
                             <source src="{{ media_file.file.url }}" type="video/mp4">
-                            Your browser does not support the video tag.
+                            Ваш браузер не поддерживает видео-тег.
                         </video>
                     {% elif media_file.is_image %}
                         <img src="{{ media_file.file.url }}" alt="Postcard Image" class="img-fluid rounded postcard-media">
                     {% else %}
-                        <p>Unsupported media type.</p>
+                        <p>Неподдерживаемый медиатип</p>
                     {% endif %}
                 </div>
                 <!-- Button to Open the Modal -->
@@ -31,7 +31,7 @@
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="deleteModalLabel">Enter Password to Delete Media</h5>
+                                <h5 class="modal-title" id="deleteModalLabel">Введите пароль для удаления медиафайл</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
@@ -55,7 +55,7 @@
                     <div class="form-group mt-2">
                         {{ add_form.password.label_tag }} {{ add_form.password }}
                     </div>
-                    <button type="submit" name="add_photo" class="btn btn-primary mt-3">Add Media</button>
+                    <button type="submit" name="add_photo" class="btn btn-primary mt-3">Добавить медиафайл</button>
                 </form>
             {% endif %}
         </div>
