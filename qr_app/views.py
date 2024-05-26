@@ -148,7 +148,8 @@ def postcard_detail(request, uuid):
                     if media_type in ['image', 'video']:
                         compressed_path = compress_media(media_file.file.path, media_type)
                         if compressed_path:
-                            media_file.file.name = os.path.join('media_files', os.path.basename(compressed_path))
+                            relative_compressed_path = os.path.relpath(compressed_path, settings.MEDIA_ROOT)
+                            media_file.file.name = relative_compressed_path.replace('\\', '/')  # для корректного отображения в URL
                             media_file.save()
                             return redirect('postcard_detail', uuid=uuid)
                         else:
