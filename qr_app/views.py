@@ -2,6 +2,8 @@ import os
 import qrcode
 import random
 import string
+from PIL import Image
+from moviepy.editor import VideoFileClip
 import mimetypes
 from django.conf import settings
 from django.http import HttpResponse, HttpResponseForbidden
@@ -9,7 +11,6 @@ from django.shortcuts import render, get_object_or_404, redirect
 from io import BytesIO
 from qr_app.models import Postcard
 from qr_app.forms import MediaFileForm, DeleteMediaFileForm
-from qr_app.utils import compress_image, compress_video
 
 
 def generate_random_password(length=11):
@@ -53,16 +54,77 @@ def generate_qr_code(request):
     return render(request, 'qr_code.html', context)
 
 
+def compress_image(image_path, output_path, quality=85):
+    """
+    Сжимает изображение и сохраняет его в указанном пути с заданным качеством.
+    """
+    try:
+        with Image.open(image_path) as img:
+            img.save(output_path, 'JPEG', quality=quality)
+    except Exception as e:
+        print(f"Error compressing image: {e}")
+
+
+def compress_video(video_path, output_path, reduction_percentage=50):
+    """
+    Сжимает видео, уменьшая его размер на заданный процент, и сохраняет его в указанном пути.
+    """
+    try:
+        clip = VideoFileClip(video_path)
+
+        # Получаем исходный размер видео
+        original_size = os.path.getsize(video_path)  # размер видео в байтах
+        target_size = original_size * (1 - reduction_percentage / 100)  # целевой размер в байтах
+
+        # Продолжительность видео в секундах
+        duration = clip.duration
+
+        # Целевой битрейт в битах в секунду
+        target_bitrate = (target_size * 8) / duration  # битрейт в битах
+
+        # Параметры кодирования
+        codec = 'libx264'
+        preset = 'slow'
+        audio_bitrate = '128k'
+
+        clip.write_videofile(
+            output_path,
+            codec=codec,
+            bitrate=f"{int(target_bitrate / 1000)}k",  # битрейт в килобитах
+            audio_codec='aac',
+            audio_bitrate=audio_bitrate,
+            preset=preset
+        )
+        print(f"Video compressed to: {output_path}")
+    except Exception as e:
+        print(f"Error compressing video: {e}")
+
+
 def compress_media(file_path, media_type):
+    """
+    Определяет тип медиафайла и сжимает его в зависимости от типа (изображение или видео).
+    """
     compressed_path = os.path.join(settings.MEDIA_ROOT, 'c_media_files', os.path.basename(file_path))
-    if media_type == 'image':
-        compress_image(file_path, compressed_path)
-    elif media_type == 'video':
-        compress_video(file_path, compressed_path)
-    return compressed_path
+    try:
+        if media_type == 'image':
+            compress_image(file_path, compressed_path)
+        elif media_type == 'video':
+            compress_video(file_path, compressed_path)
+        else:
+            raise ValueError("Unsupported media type")
+
+        if os.path.exists(compressed_path):
+            os.remove(file_path)
+        return compressed_path
+    except Exception as e:
+        print(f"Error compressing media: {e}")
+        return None
 
 
 def postcard_detail(request, uuid):
+    """
+    Обрабатывает запросы к странице подробностей открытки, включая добавление и удаление медиафайлов.
+    """
     postcard = get_object_or_404(Postcard, uuid=uuid)
     media_file = getattr(postcard, 'media_file', None)
 
@@ -70,11 +132,13 @@ def postcard_detail(request, uuid):
     delete_form = DeleteMediaFileForm()
 
     if request.method == 'POST':
+        password = request.POST.get('password')
+
         if 'add_photo' in request.POST:
-            form = MediaFileForm(request.POST, request.FILES)
-            if form.is_valid():
-                if request.POST.get('password') == postcard.password:
-                    media_file = form.save(commit=False)
+            add_form = MediaFileForm(request.POST, request.FILES)
+            if add_form.is_valid():
+                if password == postcard.password:
+                    media_file = add_form.save(commit=False)
                     media_file.postcard = postcard
                     media_file.save()
 
@@ -83,20 +147,23 @@ def postcard_detail(request, uuid):
 
                     if media_type in ['image', 'video']:
                         compressed_path = compress_media(media_file.file.path, media_type)
-                        media_file.file.name = os.path.join('media_files', os.path.basename(compressed_path))
-                        media_file.save()
-                        return redirect('postcard_detail', uuid=uuid)
+                        if compressed_path:
+                            media_file.file.name = os.path.join('media_files', os.path.basename(compressed_path))
+                            media_file.save()
+                            return redirect('postcard_detail', uuid=uuid)
+                        else:
+                            return HttpResponseForbidden('Error compressing media file')
                     else:
                         return HttpResponseForbidden('Unsupported media type')
                 else:
                     return HttpResponseForbidden('Incorrect password')
             else:
-                print(form.errors)
+                print(add_form.errors)
 
         elif 'delete_photo' in request.POST:
-            form = DeleteMediaFileForm(request.POST)
-            if form.is_valid():
-                if request.POST.get('password') == postcard.password:
+            delete_form = DeleteMediaFileForm(request.POST)
+            if delete_form.is_valid():
+                if password == postcard.password:
                     if media_file:
                         media_file.delete()
                         return redirect('postcard_detail', uuid=uuid)

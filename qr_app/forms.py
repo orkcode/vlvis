@@ -14,7 +14,7 @@ class MediaFileForm(forms.ModelForm):
 
     def clean_file(self):
         file = self.cleaned_data.get('file')
-        max_duration = 60  # Максимальная длительность видео в секундах
+        max_duration = 150  # Максимальная длительность видео в секундах
 
         if file and file.content_type in ['video/mp4', 'video/quicktime', 'video/x-msvideo', 'video/x-ms-wmv']:
             # Используем временный файл для сохранения загруженного видео

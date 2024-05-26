@@ -39,6 +39,11 @@
                                     {% csrf_token %}
                                     <div class="form-group">
                                         {{ delete_form.password.label_tag }} {{ delete_form.password }}
+                                        {% if delete_form.password.errors %}
+                                            <div class="text-danger">
+                                                {{ delete_form.password.errors }}
+                                            </div>
+                                        {% endif %}
                                     </div>
                                     <button type="submit" name="delete_photo" class="btn btn-primary mt-2">OK</button>
                                 </form>
@@ -51,9 +56,19 @@
                     {% csrf_token %}
                     <div class="form-group">
                         {{ add_form.file.label_tag }} {{ add_form.file }}
+                        {% if add_form.file.errors %}
+                            <div class="text-danger">
+                                {{ add_form.file.errors }}
+                            </div>
+                        {% endif %}
                     </div>
                     <div class="form-group mt-2">
                         {{ add_form.password.label_tag }} {{ add_form.password }}
+                        {% if add_form.password.errors %}
+                            <div class="text-danger">
+                                {{ add_form.password.errors }}
+                            </div>
+                        {% endif %}
                     </div>
                     <button type="submit" name="add_photo" class="btn btn-primary mt-3">Добавить медиафайл</button>
                 </form>
